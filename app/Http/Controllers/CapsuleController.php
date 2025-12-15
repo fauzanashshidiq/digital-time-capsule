@@ -130,23 +130,4 @@ class CapsuleController extends Controller
         return redirect()->route('capsules.index')
             ->with('success', 'Capsule berhasil dihapus');
     }
-
-    /**
-     * Unlock capsule (manual check)
-     */
-    public function unlock(Capsule $capsule)
-    {
-        if (! $capsule->canBeUnlocked()) {
-            abort(403, 'Capsule belum waktunya dibuka');
-        }
-
-        if (! $capsule->is_unlocked) {
-            $capsule->update([
-                'is_unlocked' => true,
-                'unlocked_at' => now(),
-            ]);
-        }
-
-        return redirect()->route('capsules.show', $capsule);
-    }
 }

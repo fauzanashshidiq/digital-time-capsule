@@ -41,4 +41,18 @@ class Capsule extends Model
     {
         return now()->greaterThanOrEqualTo($this->unlock_date);
     }
+
+    protected static function booted()
+    {
+        static::retrieved(function ($capsule) {
+            if (
+                ! $capsule->is_unlocked &&
+                now()->greaterThanOrEqualTo($capsule->unlock_date)
+            ) {
+                $capsule->updateQuietly([
+                    'is_unlocked' => true,
+                ]);
+            }
+        });
+    }
 }
