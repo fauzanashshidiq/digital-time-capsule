@@ -47,7 +47,7 @@ class CapsuleController extends Controller
         $request->validate([
             'message' => 'required|string',
             'unlock_date' => 'required|date|after:today',
-            'images.*' => 'nullable|image|max:2048',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $capsule = Capsule::create([
