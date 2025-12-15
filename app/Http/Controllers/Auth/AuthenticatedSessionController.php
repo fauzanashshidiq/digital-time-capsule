@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -24,11 +26,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->validate([
+        'username' => 'required|string',
+        'password' => 'required|string',
+    ]);
 
-        $request->session()->regenerate();
+    if (! Auth::attempt($request->only('username', 'password'))) {
+        throw ValidationException::withMessages([
+            'username' => __('Auth failed'),
+        ]);
+    }
 
-        return redirect()->intended(route('dashboard', absolute: false));
+    $request->session()->regenerate();
+
+    return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**
