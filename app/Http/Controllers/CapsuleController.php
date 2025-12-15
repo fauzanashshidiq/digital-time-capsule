@@ -114,7 +114,7 @@ class CapsuleController extends Controller
     }
 
     /**
-     * Hapus capsule (locked only)
+     * Hapus capsule
      */
     public function destroy(Capsule $capsule)
     {

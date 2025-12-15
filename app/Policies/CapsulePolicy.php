@@ -38,10 +38,9 @@ class CapsulePolicy
     /**
      * Boleh hapus capsule?
      * - pemilik
-     * - dan BELUM unlocked
      */
     public function delete(User $user, Capsule $capsule): bool
     {
-        return $this->isOwner($user, $capsule) && ! $capsule->is_unlocked;
+        return $this->isOwner($user, $capsule);
     }
 }
