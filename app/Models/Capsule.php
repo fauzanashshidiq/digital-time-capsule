@@ -55,4 +55,17 @@ class Capsule extends Model
             }
         });
     }
+
+    public function remainingLabel(): string
+    {
+        return Carbon::now()->diffForHumans(
+            $this->unlock_date,
+            ['parts' => 2, 'short' => false]
+        );
+    }
+
+    public function agoLabel(): string
+    {
+        return Carbon::parse($this->unlock_date)->diffForHumans();
+    }
 }
