@@ -20,8 +20,6 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('capsules', CapsuleController::class);
-    Route::post('/capsules/{capsule}/unlock', [CapsuleController::class, 'unlock'])
-        ->name('capsules.unlock');
 });
 
 require __DIR__.'/auth.php';
