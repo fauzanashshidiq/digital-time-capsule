@@ -68,7 +68,7 @@ class CapsuleController extends Controller
             }
         }
 
-        return redirect()->route('capsules.index')
+        return redirect()->route('capsules.create')
             ->with('success', 'Capsule berhasil dibuat');
     }
 
