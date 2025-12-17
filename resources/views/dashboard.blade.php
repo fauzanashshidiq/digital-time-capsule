@@ -14,13 +14,17 @@
 
                 @forelse ($lockedCapsules as $capsule)
                     <button
-                        class="block w-full text-left p-2 hover:bg-gray-200 rounded"
+                        class="block w-full text-left p-2 hover:bg-gray-200 rounded remaining-item"
+                        data-unlock="{{ $capsule->unlock_date->startOfDay()->timestamp }}"
                         onclick="selectCapsule(
-                            '{{ ucfirst($capsule->remainingLabel()) }}',
+                            this.dataset.label,
                             'locked'
                         )"
+                        data-label="{{ ucfirst($capsule->remainingLabel()) }}"
                     >
-                        {{ ucfirst($capsule->remainingLabel()) }}
+                        <span class="remaining-text">
+                            {{ ucfirst($capsule->remainingLabel()) }}
+                        </span>
                     </button>
                 @empty
                     <p class="text-sm text-gray-500">No locked capsules</p>
@@ -86,5 +90,56 @@
                 preview.classList.add('cursor-pointer', 'hover:bg-gray-50');
             }
         }
+    </script>
+    <script>
+    function formatRemaining(seconds) {
+        if (seconds <= 0) return 'Unlocked';
+
+        const units = [
+            { label: 'year', value: 31536000 },
+            { label: 'month', value: 2592000 },
+            { label: 'week', value: 604800 },
+            { label: 'day', value: 86400 },
+            { label: 'hour', value: 3600 },
+            { label: 'minute', value: 60 },
+            { label: 'second', value: 1 },
+        ];
+
+        let parts = [];
+
+        for (const unit of units) {
+            const amount = Math.floor(seconds / unit.value);
+            if (amount > 0) {
+                parts.push(`${amount} ${unit.label}${amount > 1 ? 's' : ''}`);
+                seconds -= amount * unit.value;
+            }
+            if (parts.length === 2) break;
+        }
+
+        return parts.join(' and ') + ' remaining';
+    }
+
+    function startRemainingCountdown() {
+        document.querySelectorAll('.remaining-item').forEach(button => {
+            const unlockTimestamp = parseInt(button.dataset.unlock);
+            const text = button.querySelector('.remaining-text');
+
+            setInterval(() => {
+                const now = Math.floor(Date.now() / 1000);
+                const diff = unlockTimestamp - now;
+
+                const label = formatRemaining(diff);
+                text.innerText = label;
+
+                // update preview label kalau sedang dipilih
+                if (document.getElementById('capsule-title').innerText === button.dataset.label) {
+                    document.getElementById('capsule-title').innerText = label;
+                }
+
+            }, 1000);
+        });
+    }
+
+    startRemainingCountdown();
     </script>
 </x-app-layout>
