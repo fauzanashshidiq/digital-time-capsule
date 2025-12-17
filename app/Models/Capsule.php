@@ -39,7 +39,7 @@ class Capsule extends Model
     // Helper: apakah capsule sudah bisa dibuka?
     public function canBeUnlocked(): bool
     {
-        return now()->greaterThanOrEqualTo($this->unlock_date);
+        return now()->greaterThanOrEqualTo($this->unlock_date->startOfDay());
     }
 
     protected static function booted()
@@ -47,7 +47,9 @@ class Capsule extends Model
         static::retrieved(function ($capsule) {
             if (
                 ! $capsule->is_unlocked &&
-                now()->greaterThanOrEqualTo($capsule->unlock_date)
+                now()->startOfDay()->greaterThanOrEqualTo(
+                    $capsule->unlock_date->startOfDay()
+                )
             ) {
                 $capsule->updateQuietly([
                     'is_unlocked' => true,
@@ -58,14 +60,37 @@ class Capsule extends Model
 
     public function remainingLabel(): string
     {
-        return Carbon::now()->diffForHumans(
+        if ($this->is_unlocked) {
+            return 'Unlocked';
+        }
+
+        return now()->diffForHumans(
             $this->unlock_date,
-            ['parts' => 2, 'short' => false]
-        );
+            [
+                'parts' => 2,
+                'join' => true,
+                'syntax' => Carbon::DIFF_ABSOLUTE,
+            ]
+        ) . ' remaining';
     }
 
     public function agoLabel(): string
     {
-        return Carbon::parse($this->unlock_date)->diffForHumans();
+        $today = now()->startOfDay();
+        $unlockDay = $this->unlock_date->startOfDay();
+
+            // Kalau hari ini
+        if ($unlockDay->equalTo($today)) {
+            return 'Today';
+        }
+
+        return $today->diffForHumans(
+            $this->unlock_date->startOfDay(),
+            [
+                'parts' => 2,
+                'join' => true,
+                'syntax' => Carbon::DIFF_ABSOLUTE,
+            ]
+        ) . ' ago';
     }
 }
