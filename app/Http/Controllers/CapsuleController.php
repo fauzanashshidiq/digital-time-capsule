@@ -109,7 +109,7 @@ class CapsuleController extends Controller
             'unlock_date' => $request->unlock_date,
         ]);
 
-        return redirect()->route('capsules.index')
+        return redirect()->route('dashboard')
             ->with('success', 'Capsule berhasil diupdate');
     }
 
