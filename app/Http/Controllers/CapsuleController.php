@@ -136,7 +136,20 @@ class CapsuleController extends Controller
      */
     public function editMode()
     {
-        return view('capsules.edit-mode');
+        $lockedCapsules = Capsule::where('user_id', Auth::id())
+            ->where('is_unlocked', false)
+            ->orderBy('unlock_date')
+            ->get();
+
+        $unlockedCapsules = Capsule::where('user_id', Auth::id())
+            ->where('is_unlocked', true)
+            ->orderByDesc('unlock_date')
+            ->get();
+
+        return view('capsules.edit-mode', compact(
+            'lockedCapsules',
+            'unlockedCapsules'
+        ));
     }
 
     /**
