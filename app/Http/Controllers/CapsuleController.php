@@ -127,7 +127,7 @@ class CapsuleController extends Controller
 
         $capsule->delete();
 
-        return redirect()->route('capsules.index')
+        return redirect()->route('dashboard')
             ->with('success', 'Capsule berhasil dihapus');
     }
 
@@ -157,6 +157,19 @@ class CapsuleController extends Controller
      */
     public function deleteMode()
     {
-        return view('capsules.delete-mode');
+        $lockedCapsules = Capsule::where('user_id', Auth::id())
+            ->where('is_unlocked', false)
+            ->orderBy('unlock_date')
+            ->get();
+
+        $unlockedCapsules = Capsule::where('user_id', Auth::id())
+            ->where('is_unlocked', true)
+            ->orderByDesc('unlock_date')
+            ->get();
+
+        return view('capsules.delete-mode', compact(
+            'lockedCapsules',
+            'unlockedCapsules'
+        ));
     }
 }

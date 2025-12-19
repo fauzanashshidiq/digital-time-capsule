@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('capsules/edit-mode', [CapsuleController::class, 'editMode'])
         ->name('capsules.edit-mode');
-    Route::get('capsules/delete-mode', [CapsuleController::class, 'editMode'])
+    Route::get('capsules/delete-mode', [CapsuleController::class, 'deleteMode'])
         ->name('capsules.delete-mode');
     Route::resource('capsules', CapsuleController::class);
 
