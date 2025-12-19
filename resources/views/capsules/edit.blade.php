@@ -22,9 +22,19 @@
             <form
                 method="POST"
                 action="{{ route('capsules.update', $capsule) }}"
+                enctype="multipart/form-data"
             >
                 @csrf
                 @method('PUT')
+
+                {{-- Info --}}
+                <div class="mb-6 text-sm text-gray-600 bg-gray-50 p-3 rounded">
+                    <p>
+                        This capsule is still locked.
+                        You may rewrite its content, but previous content
+                        will not be shown.
+                    </p>
+                </div>
 
                 {{-- Unlock Date --}}
                 <div class="mb-6">
@@ -34,41 +44,46 @@
                     <input
                         type="date"
                         name="unlock_date"
-                        value="{{ old('unlock_date', $capsule->unlock_date->format('Y-m-d')) }}"
+                        value="{{ old($capsule->unlock_date->format('Y-m-d')) }}"
                         class="border rounded p-2 w-full focus:ring focus:ring-indigo-300"
-                        onchange="updatePreview(this.value)"
                     >
-
-                    <p id="unlock-preview" class="text-sm text-gray-500 mt-1">
-                        This capsule will unlock on
-                        {{ $capsule->unlock_date->toFormattedDateString() }}
-                    </p>
                 </div>
 
                 {{-- Message --}}
-                <div class="mb-4">
+                <div class="mb-6">
                     <label class="block font-medium mb-1">
-                        Capsule Message
+                        New Capsule Message
                     </label>
                     <textarea
                         name="message"
                         rows="6"
                         class="w-full border rounded p-2 focus:ring focus:ring-indigo-300"
-                        placeholder="Write a message for your future self..."
-                    >{{ old('message', $capsule->message) }}</textarea>
+                        placeholder="Write a new message for your future self..."
+                    >{{ old('message') }}</textarea>
                 </div>
 
-                {{-- Info --}}
-                <div class="mb-6 text-sm text-gray-500">
-                    <p>
-                        ⚠️ Capsule can only be edited while locked.
-                        Once unlocked, it becomes read-only.
+                {{-- Images --}}
+                <div class="mb-6">
+                    <label class="block font-medium mb-1">
+                        New Capsule Images (optional)
+                    </label>
+
+                    <input
+                        type="file"
+                        name="images[]"
+                        multiple
+                        accept="image/*"
+                        class="w-full border rounded p-2"
+                    >
+
+                    <p class="text-sm text-gray-500 mt-1">
+                        Uploading images will permanently replace all existing images.
                     </p>
                 </div>
 
                 {{-- Actions --}}
                 <div class="flex justify-end gap-3">
-                    <a href="{{ route('capsules.index') }}"
+                    <a href="{{ route('capsules.edit-mode') }}"
                        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
                         Cancel
                     </a>
@@ -84,13 +99,4 @@
             </form>
         </div>
     </div>
-
-    <script>
-        function updatePreview(date) {
-            if (!date) return;
-            const target = new Date(date);
-            document.getElementById('unlock-preview').innerText =
-                `This capsule will unlock on ${target.toDateString()}`;
-        }
-    </script>
 </x-app-layout>

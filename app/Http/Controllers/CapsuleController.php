@@ -102,6 +102,7 @@ class CapsuleController extends Controller
         $request->validate([
             'message' => 'required|string',
             'unlock_date' => 'required|date|after:today',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $capsule->update([
@@ -109,7 +110,24 @@ class CapsuleController extends Controller
             'unlock_date' => $request->unlock_date,
         ]);
 
-        return redirect()->route('dashboard')
+        foreach ($capsule->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+        }
+
+        if ($request->hasFile('images')) {
+
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('capsules', 'public');
+
+            CapsuleImage::create([
+                'capsule_id' => $capsule->id,
+                'image_path' => $path,
+            ]);
+        }
+    }
+
+        return redirect()->route('capsules.edit-mode')
             ->with('success', 'Capsule berhasil diupdate');
     }
 
@@ -127,7 +145,7 @@ class CapsuleController extends Controller
 
         $capsule->delete();
 
-        return redirect()->route('dashboard')
+        return redirect()->route('capsules.delete-mode')
             ->with('success', 'Capsule berhasil dihapus');
     }
 
