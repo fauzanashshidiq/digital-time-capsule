@@ -130,4 +130,20 @@ class CapsuleController extends Controller
         return redirect()->route('capsules.index')
             ->with('success', 'Capsule berhasil dihapus');
     }
+
+    /**
+     * Form halaman mode edit
+     */
+    public function editMode()
+    {
+        return view('capsules.edit-mode');
+    }
+
+    /**
+     * Form halaman mode delete
+     */
+    public function deleteMode()
+    {
+        return view('capsules.delete-mode');
+    }
 }

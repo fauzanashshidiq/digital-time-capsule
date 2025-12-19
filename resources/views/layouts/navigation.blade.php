@@ -23,7 +23,7 @@
                     </x-nav-link>
                 </div>
 
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('capsules.edit-mode')" :active="request()->routeIs('dashboard')">
                         {{ __('Edit Capsule') }}
                     </x-nav-link>
@@ -33,7 +33,7 @@
                     <x-nav-link :href="route('capsules.delete-mode')" :active="request()->routeIs('dashboard')">
                         {{ __('Hapus Capsule') }}
                     </x-nav-link>
-                </div> --}}
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
