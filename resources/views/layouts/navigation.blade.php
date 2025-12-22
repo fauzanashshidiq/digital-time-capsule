@@ -1,6 +1,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
-<aside class="hidden sm:flex w-72 bg-[#1f1f1f] border-r border-gray-600 p-6 flex-col justify-between min-h-screen font-['Press_Start_2P'] text-white shrink-0">
+<aside class="hidden sm:flex w-56 bg-[#1f1f1f] border-r border-gray-600 p-6 flex-col justify-between min-h-screen font-['Press_Start_2P'] text-white shrink-0">
     <div>
         <div class="mb-10 pt-4 text-center">
             <p class="text-sm leading-loose">

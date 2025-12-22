@@ -67,8 +67,7 @@ class Capsule extends Model
         return now()->diffForHumans(
             $this->unlock_date,
             [
-                'parts' => 2,
-                'join' => true,
+                'parts' => 1,
                 'syntax' => Carbon::DIFF_ABSOLUTE,
             ]
         ) . ' remaining';
@@ -79,16 +78,14 @@ class Capsule extends Model
         $today = now()->startOfDay();
         $unlockDay = $this->unlock_date->startOfDay();
 
-            // Kalau hari ini
         if ($unlockDay->equalTo($today)) {
             return 'Today';
         }
 
         return $today->diffForHumans(
-            $this->unlock_date->startOfDay(),
+            $unlockDay,
             [
-                'parts' => 2,
-                'join' => true,
+                'parts' => 1,
                 'syntax' => Carbon::DIFF_ABSOLUTE,
             ]
         ) . ' ago';
