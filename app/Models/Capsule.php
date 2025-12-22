@@ -22,6 +22,7 @@ class Capsule extends Model
         'unlock_date' => 'date',
         'unlocked_at' => 'datetime',
         'is_unlocked' => 'boolean',
+        'message' => 'encrypted',
     ];
 
     // Relasi ke User
