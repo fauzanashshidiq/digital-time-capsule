@@ -9,6 +9,8 @@
 
         <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
         <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
         <style>
             body { font-family: 'Press Start 2P', cursive; }
@@ -17,6 +19,18 @@
             ::-webkit-scrollbar-thumb { background: #4a4646; }
             .capsule-active {
                 box-shadow: 0 0 12px rgba(255,255,255,0.15);
+            }
+            .ql-editor.ql-blank::before {
+                font-family: 'Press Start 2P', monospace;
+                font-size: 10px;
+                color: #9ca3af;
+                opacity: 0.8;
+                left: 16px;
+            }
+            .ql-editor {
+                font-family: 'Press Start 2P', monospace;
+                font-size: 11px;
+                line-height: 1.8;
             }
         </style>
     </head>
@@ -31,7 +45,7 @@
                 </div>
             @endisset
 
-            <div class="flex-1 flex flex-col items-center justify-center">
+            <div class="flex-1 w-full">
                 <div class="mb-3 text-center">
                     <p class="text-sm sm:text-2xl leading-loose mb-2">
                         Digital Time Capsule

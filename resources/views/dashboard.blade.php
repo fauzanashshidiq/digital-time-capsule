@@ -1,4 +1,5 @@
 <x-app-layout>
+    <div class="w-full flex justify-center">
     <div class="flex flex-col sm:flex-row w-full max-w-6xl h-auto sm:h-[85vh] gap-6 sm:gap-4">
         {{-- MOBILE CREATE --}}
         <a href="{{ route('capsules.create') }}"
@@ -136,7 +137,7 @@
                 </div>
             </div>
         </section>
-
+    </div>
     </div>
 
     <script>
