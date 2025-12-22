@@ -13,12 +13,12 @@
         </a>
 
         {{-- LEFT: Locked Capsules --}}
-        <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
-            <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400">
+        <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f] flex flex-col sm:h-full">
+            <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400 shrink-0">
                 Locked Capsule
             </p>
 
-            <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+            <div class="flex-1 sm:h-0 overflow-y-auto overflow-x-auto custom-scrollbar">
                 <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
                     @forelse ($lockedCapsules as $capsule)
                         <button
@@ -31,8 +31,8 @@
                             </span>
                         </button>
                     @empty
-                        <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
-                            <p class="text-[10px] tracking-widest uppercase">NO LOCKED CAPSULES</p>
+                        <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full">
+                            <p class="text-[10px] tracking-widest uppercase text-center">NO LOCKED CAPSULES</p>
                         </div>
                     @endforelse
                 </div>
@@ -102,12 +102,12 @@
         </section>
 
         {{-- RIGHT: Unlocked Capsules --}}
-        <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
-            <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400">
+        <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f] flex flex-col sm:h-full">
+            <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400 shrink-0">
                 Unlocked Capsule
             </p>
 
-            <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+            <div class="flex-1 sm:h-0 overflow-y-auto overflow-x-auto custom-scrollbar">
                 <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
                     @forelse ($unlockedCapsules as $capsule)
                         <button
@@ -120,8 +120,8 @@
                             </span>
                         </button>
                     @empty
-                        <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
-                            <p class="text-[10px] tracking-widest uppercase">NO UNLOCKED CAPSULES</p>
+                        <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full">
+                            <p class="text-[10px] tracking-widest uppercase text-center">NO UNLOCKED CAPSULES</p>
                         </div>
                     @endforelse
                 </div>

@@ -12,40 +12,33 @@
                 <img src="{{ asset('img/plus.png') }}" class="w-8 h-8 object-contain"></img>
             </a>
             {{-- LEFT: LOCKED --}}
-            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
-                <p class="text-center text-[10px] mb-4 tracking-widest text-gray-400">
+            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f] flex flex-col sm:h-full">
+                <p class="text-center text-[10px] mb-4 tracking-widest text-gray-400 shrink-0">
                     LOCKED CAPSULE
                 </p>
 
-                <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+                <div class="flex-1 sm:h-0 overflow-y-auto overflow-x-auto custom-scrollbar">
                     <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
                         @forelse ($lockedCapsules as $capsule)
-                        <div
-                            draggable="true"
-                            data-url="{{ route('capsules.destroy',$capsule) }}"
-                            data-label="{{ $capsule->remainingLabel() }}"
-                            data-type="locked"
-                            onclick="selectCapsule(this)"
-                            ondragstart="onDragStart(event)"
-                            class="
-                                capsule-item
-                                border border-transparent rounded-md p-2
-                                transition
-                                cursor-grab shrink-0 w-24 sm:w-auto
-                                hover:bg-red-900/30
-                                hover:border-red-500"
-                        >
-                            <div class="relative inline-block">
-                                <img src="{{ asset('img/locked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14">
-                                <img src="{{ asset('img/cancel.png') }}"
-                                    class="absolute -top-2 -right-2 w-8 h-8 object-contain">
+                            <div
+                                draggable="true"
+                                data-url="{{ route('capsules.destroy',$capsule) }}"
+                                data-label="{{ $capsule->remainingLabel() }}"
+                                data-type="locked"
+                                onclick="selectCapsule(this)"
+                                ondragstart="onDragStart(event)"
+                                class="capsule-item border border-transparent rounded-md p-2 transition cursor-grab shrink-0 w-24 sm:w-auto hover:bg-red-900/30 hover:border-red-500"
+                            >
+                                <div class="relative inline-block">
+                                    <img src="{{ asset('img/locked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14">
+                                    <img src="{{ asset('img/cancel.png') }}" class="absolute -top-2 -right-2 w-8 h-8 object-contain">
+                                </div>
+                                <span class="block text-[8px] mt-2 text-gray-300">
+                                    {{ $capsule->remainingLabel() }}
+                                </span>
                             </div>
-                            <span class="block text-[8px] mt-2 text-gray-300">
-                                {{ $capsule->remainingLabel() }}
-                            </span>
-                        </div>
                         @empty
-                            <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
+                            <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full">
                                 <p class="text-[10px] tracking-widest uppercase">NO LOCKED CAPSULES</p>
                             </div>
                         @endforelse
@@ -108,40 +101,33 @@
             </section>
 
             {{-- RIGHT: UNLOCKED --}}
-            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
-                <p class="text-center text-[10px] mb-4 tracking-widest text-gray-400">
+            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f] flex flex-col sm:h-full">
+                <p class="text-center text-[10px] mb-4 tracking-widest text-gray-400 shrink-0">
                     UNLOCKED CAPSULE
                 </p>
 
-                <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+                <div class="flex-1 sm:h-0 overflow-y-auto overflow-x-auto custom-scrollbar">
                     <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
                         @forelse ($unlockedCapsules as $capsule)
-                        <div
-                            draggable="true"
-                            data-url="{{ route('capsules.destroy',$capsule) }}"
-                            data-label="{{ $capsule->agoLabel() }}"
-                            data-type="unlocked"
-                            onclick="selectCapsule(this)"
-                            ondragstart="onDragStart(event)"
-                            class="
-                                capsule-item
-                                border border-transparent rounded-md p-2
-                                transition
-                                cursor-grab shrink-0 w-24 sm:w-auto
-                                hover:bg-red-900/30
-                                hover:border-red-500"
-                        >
-                            <div class="relative inline-block">
-                                <img src="{{ asset('img/unlocked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14">
-                                <img src="{{ asset('img/cancel.png') }}"
-                                    class="absolute -top-2 -right-1 w-8 h-8 object-contain">
+                            <div
+                                draggable="true"
+                                data-url="{{ route('capsules.destroy',$capsule) }}"
+                                data-label="{{ $capsule->agoLabel() }}"
+                                data-type="unlocked"
+                                onclick="selectCapsule(this)"
+                                ondragstart="onDragStart(event)"
+                                class="capsule-item border border-transparent rounded-md p-2 transition cursor-grab shrink-0 w-24 sm:w-auto hover:bg-red-900/30 hover:border-red-500"
+                            >
+                                <div class="relative inline-block">
+                                    <img src="{{ asset('img/unlocked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14">
+                                    <img src="{{ asset('img/cancel.png') }}" class="absolute -top-2 -right-1 w-8 h-8 object-contain">
+                                </div>
+                                <span class="block text-[8px] mt-2 text-gray-300">
+                                    {{ $capsule->agoLabel() }}
+                                </span>
                             </div>
-                            <span class="block text-[8px] mt-2 text-gray-300">
-                                {{ $capsule->agoLabel() }}
-                            </span>
-                        </div>
                         @empty
-                            <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
+                            <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full">
                                 <p class="text-[10px] tracking-widest uppercase">NO UNLOCKED CAPSULES</p>
                             </div>
                         @endforelse
