@@ -13,7 +13,7 @@
             </a>
             {{-- LEFT: Locked Capsules --}}
             <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
-                <p class="text-center text-[10px] my-4 tracking-widest uppercase text-gray-400">
+                <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400">
                     Locked Capsule
                 </p>
 
@@ -59,9 +59,7 @@
 
             {{-- CENTER: EDIT PREVIEW --}}
             <section class="flex-1 flex flex-col items-center justify-center gap-12 px-4">
-
                 <div class="relative">
-
                     {{-- LEFT ICON : BACK TO DASHBOARD (MOBILE ONLY) --}}
                     <a
                         href="{{ route('dashboard') }}"
@@ -104,7 +102,6 @@
                             class="w-8 h-8 object-contain"
                         >
                     </a>
-
                 </div>
 
                 {{-- TAP BOX --}}
@@ -127,7 +124,6 @@
                 >
                     Tap atau drag capsule<br>untuk Edit Capsule
                 </div>
-
             </section>
 
             {{-- RIGHT: Unlocked Capsules --}}
@@ -135,7 +131,6 @@
                 <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400">
                     Unlocked Capsule
                 </p>
-
                 <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
                     <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
                         @foreach ($unlockedCapsules as $capsule)
@@ -152,7 +147,6 @@
                     </div>
                 </div>
             </section>
-
         </div>
     </div>
 

@@ -14,7 +14,7 @@
 
         {{-- LEFT: Locked Capsules --}}
         <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
-            <p class="text-center text-[10px] my-4 tracking-widest uppercase text-gray-400">
+            <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400">
                 Locked Capsule
             </p>
 

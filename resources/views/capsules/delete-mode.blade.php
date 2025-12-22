@@ -1,101 +1,256 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Delete Capsules
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto grid grid-cols-3 gap-6">
-
-            {{-- LEFT: Locked Capsules --}}
-            <div class="bg-gray-100 p-4 rounded">
-                <h3 class="font-semibold mb-3">Locked Capsules</h3>
-
-                @forelse ($lockedCapsules as $capsule)
-                    <button
-                        class="block w-full text-left p-2 hover:bg-red-100 rounded"
-                        onclick="selectCapsule(
-                            '{{ $capsule->remainingLabel() }}',
-                            '{{ route('capsules.destroy', $capsule) }}'
-                        )"
-                    >
-                        {{ ucfirst($capsule->remainingLabel()) }}
-                    </button>
-                @empty
-                    <p class="text-sm text-gray-500">No locked capsules</p>
-                @endforelse
-            </div>
-
-            {{-- CENTER: Delete Preview --}}
-            <button
-                id="capsule-preview"
-                onclick="confirmDelete()"
-                class="block w-full bg-white p-6 rounded shadow text-center cursor-not-allowed"
-                disabled
-            >
-                <h2 id="capsule-title" class="text-xl font-semibold mb-2">
-                    Select a capsule
-                </h2>
-                <p id="capsule-message" class="text-red-600">
-                    Choose a capsule to delete
+    <div class="w-full flex justify-center">
+        <div class="flex flex-col sm:flex-row w-full max-w-6xl h-auto sm:h-[85vh] gap-6 sm:gap-4">
+            {{-- MOBILE CREATE --}}
+            <a href="{{ route('capsules.create') }}"
+            class="sm:hidden flex items-center justify-center
+                    h-10 w-full
+                    border border-gray-500
+                    bg-[#1f1f1f]
+                    hover:text-white hover:bg-gray-800
+                    transition">
+                <img src="{{ asset('img/plus.png') }}" class="w-8 h-8 object-contain"></img>
+            </a>
+            {{-- LEFT: LOCKED --}}
+            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
+                <p class="text-center text-[10px] mb-4 tracking-widest text-gray-400">
+                    LOCKED CAPSULE
                 </p>
-            </button>
 
-            {{-- RIGHT: Unlocked Capsules --}}
-            <div class="bg-gray-100 p-4 rounded">
-                <h3 class="font-semibold mb-3">Unlocked Capsules</h3>
+                <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+                    <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
+                        @foreach ($lockedCapsules as $capsule)
+                        <div
+                            draggable="true"
+                            data-url="{{ route('capsules.destroy',$capsule) }}"
+                            data-label="{{ $capsule->remainingLabel() }}"
+                            data-type="locked"
+                            onclick="selectCapsule(this)"
+                            ondragstart="onDragStart(event)"
+                            class="
+                                capsule-item
+                                border border-transparent rounded-md p-2
+                                transition
+                                cursor-grab shrink-0 w-24 sm:w-auto
+                                hover:bg-red-900/30
+                                hover:border-red-500"
+                        >
+                            <div class="relative inline-block">
+                                <img src="{{ asset('img/locked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14">
+                                <img src="{{ asset('img/cancel.png') }}"
+                                    class="absolute -top-2 -right-2 w-8 h-8 object-contain">
+                            </div>
+                            <span class="block text-[8px] mt-2 text-gray-300">
+                                {{ $capsule->remainingLabel() }}
+                            </span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
 
-                @forelse ($unlockedCapsules as $capsule)
-                    <button
-                        class="block w-full text-left p-2 hover:bg-red-100 rounded"
-                        onclick="selectCapsule(
-                            '{{ $capsule->agoLabel() }}',
-                            '{{ route('capsules.destroy', $capsule) }}'
-                        )"
+            {{-- CENTER --}}
+            <section class="flex-1 flex flex-col items-center justify-center gap-10">
+                <div class="relative">
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="
+                            absolute -left-10 top-3 -translate-y-1/2
+                            text-gray-400 hover:text-white transition
+                            sm:hidden border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800
+                        "
                     >
-                        {{ ucfirst($capsule->agoLabel()) }}
-                    </button>
-                @empty
-                    <p class="text-sm text-gray-500">No unlocked capsules</p>
-                @endforelse
-            </div>
+                        <img
+                            src="{{ asset('img/home.png') }}"
+                            class="w-8 h-8 object-contain"
+                        >
+                    </a>
 
+                    <div class="flex flex-col items-center gap-3 px-7">
+                        <img src="{{ asset('img/trash.png') }}"
+                            class="ww-40 h-40
+                                sm:w-64 sm:h-64
+                                object-contain
+                                opacity-80 ">
+                    </div>
+
+                    <a
+                        href="{{ route('capsules.edit-mode') }}"
+                        class="absolute -right-10 top-3 -translate-y-1/2
+                          text-gray-400 hover:text-white transition
+                          opacity-100 pointer-events-auto
+                          sm:opacity-0 sm:pointer-events-none border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800">
+                        <img src="{{ asset('img/pencil.png') }}" class="w-8 h-8 object-contain"></img>
+                    </a>
+                </div>
+
+                <div
+                    id="delete-dropzone"
+                    onclick="openModal()"
+                    ondrop="onDrop(event)"
+                    ondragover="onDragOver(event)"
+                    class="
+                        border border-gray-400
+                        px-10 py-8
+                        text-center text-[10px]
+                        tracking-widest
+                        bg-[#1f1f1f]
+                        cursor-pointer
+                        transition
+                        hover:border-red-500
+                        hover:text-red-400
+                        hover:bg-red-900/20
+                        active:scale-95"
+                        >
+                    Tap atau drag capsule<br>untuk hapus
+                </div>
+            </section>
+
+            {{-- RIGHT: UNLOCKED --}}
+            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
+                <p class="text-center text-[10px] mb-4 tracking-widest text-gray-400">
+                    UNLOCKED CAPSULE
+                </p>
+
+                <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+                    <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
+                        @foreach ($unlockedCapsules as $capsule)
+                        <div
+                            draggable="true"
+                            data-url="{{ route('capsules.destroy',$capsule) }}"
+                            data-label="{{ $capsule->agoLabel() }}"
+                            data-type="unlocked"
+                            onclick="selectCapsule(this)"
+                            ondragstart="onDragStart(event)"
+                            class="
+                                capsule-item
+                                border border-transparent rounded-md p-2
+                                transition
+                                cursor-grab shrink-0 w-24 sm:w-auto
+                                hover:bg-red-900/30
+                                hover:border-red-500"
+                        >
+                            <div class="relative inline-block">
+                                <img src="{{ asset('img/unlocked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14">
+                                <img src="{{ asset('img/cancel.png') }}"
+                                    class="absolute -top-2 -right-1 w-8 h-8 object-contain">
+                            </div>
+                            <span class="block text-[8px] mt-2 text-gray-300">
+                                {{ $capsule->agoLabel() }}
+                            </span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+    {{-- MODAL --}}
+    <div id="delete-modal"
+        class="fixed inset-0 bg-black/70 hidden items-center justify-center z-50">
+    <div class="bg-[#4a4646] border border-gray-500 p-6 w-[90%] max-w-sm text-center">
+        <img id="modal-img" class="w-20 mx-auto mb-4">
+        <p id="modal-label" class="text-[10px] mb-6"></p>
+        <div class="flex justify-between gap-4">
+            <button onclick="closeModal()"
+                class="
+                    px-4 py-3
+                    bg-gray-600 text-[10px]
+                    transition
+                    hover:bg-gray-500
+                    active:scale-95
+                "
+                >
+                BATAL
+            </button>
+            <button onclick="confirmDelete()"
+                class="
+                    px-4 py-3
+                    bg-red-700 text-[10px]
+                    transition
+                    hover:bg-red-600
+                    hover:shadow-[0_0_10px_rgba(255,0,0,0.5)]
+                    active:scale-95
+                "
+                >
+                HAPUS
+            </button>
         </div>
     </div>
 
-    {{-- Hidden delete form --}}
     <form id="delete-form" method="POST" class="hidden">
         @csrf
         @method('DELETE')
     </form>
 
     <script>
-        let deleteUrl = null;
+        let selectedUrl = null;
+        let selectedLabel = null;
+        let selectedType = null;
 
-        function selectCapsule(label, url) {
-            const preview = document.getElementById('capsule-preview');
-            const title = document.getElementById('capsule-title');
-            const message = document.getElementById('capsule-message');
-
-            deleteUrl = url;
-
-            title.innerText = label;
-            message.innerText = 'Tap to permanently delete this capsule';
-
-            preview.disabled = false;
-            preview.classList.remove('cursor-not-allowed');
-            preview.classList.add('cursor-pointer', 'hover:bg-red-50');
+        function selectCapsule(el){
+            // clear active delete
+            document.querySelectorAll('.capsule-item').forEach(c => {
+                c.classList.remove(
+                    'border-red-500',
+                    'bg-red-900/40'
+                );
+                c.classList.add('border-transparent');
+            });
+            el.classList.remove('border-transparent');
+            // set active delete
+            el.classList.add(
+                'border-red-500',
+                'bg-red-900/40'
+            );
+            // simpan data
+            selectedUrl   = el.dataset.url;
+            selectedLabel = el.dataset.label;
+            selectedType  = el.dataset.type;
         }
 
-        function confirmDelete() {
-            if (!deleteUrl) return;
+        function onDragStart(e){
+            selectCapsule(e.currentTarget);
+        }
 
-            if (!confirm('Are you sure you want to delete this capsule?')) return;
+        function onDrop(){
+            openModal();
+        }
 
+        function openModal(){
+            if(!selectedUrl) return;
+
+            document.getElementById('modal-label').innerText = selectedLabel;
+            document.getElementById('modal-img').src =
+                selectedType === 'locked'
+                    ? "{{ asset('img/locked.png') }}"
+                    : "{{ asset('img/unlocked.png') }}";
+
+            document.getElementById('delete-modal').classList.remove('hidden');
+            document.getElementById('delete-modal').classList.add('flex');
+        }
+
+        function closeModal(){
+            document.getElementById('delete-modal').classList.add('hidden');
+        }
+
+        function confirmDelete(){
             const form = document.getElementById('delete-form');
-            form.action = deleteUrl;
+            form.action = selectedUrl;
             form.submit();
+        }
+
+        function onDragOver(e){
+            e.preventDefault();
+            e.currentTarget.classList.add('border-red-500','bg-red-900/30');
+        }
+
+        function onDrop(e){
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-red-500','bg-red-900/30');
+            openModal();
         }
     </script>
 </x-app-layout>
