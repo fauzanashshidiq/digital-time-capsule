@@ -14,7 +14,7 @@
             DASHBOARD
         </a>
 
-        <div class="space-y-6">
+        <div class="space-y-4">
             <div class="pt-4 text-center">
                 <p class="text-sm leading-loose uppercase">Tools</p>
             </div>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="sticky bottom-0 bg-[#1f1f1f] border-t border-gray-700 p-6 space-y-4">
+    <div class="sticky bottom-0 bg-[#1f1f1f] border-t border-gray-700 p-6 space-y-2">
         <a href="{{ route('profile.edit') }}" 
             class="block text-[10px] text-gray-400 hover:text-white">
             PROFILE

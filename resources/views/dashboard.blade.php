@@ -10,14 +10,22 @@
             <div class="grid grid-cols-2 gap-y-8 gap-x-4 text-center">
                 @forelse ($lockedCapsules as $capsule)
                     <button 
-                        class="remaining-item group"
+                        class="remaining-item group capsule-btn capsule-locked
+                            border border-transparent rounded-md p-2
+                            hover:bg-gray-800 transition"
                         data-unlock="{{ $capsule->unlock_date->timestamp }}"
                         data-label="{{ $capsule->remainingLabel() }}"
-                        onclick="selectCapsule('{{ $capsule->remainingLabel() }}', 'locked', null, true)"
+                        onclick="selectCapsule(
+                            '{{ $capsule->remainingLabel() }}',
+                            'locked',
+                            null,
+                            true,
+                            this
+                        )"
                     >
-                        <img src="{{ asset('img/locked.png') }}" alt="Locked" class="mx-auto w-10 h-10 object-contain mb-2 group-hover:scale-110 transition">
-                        <span class="block text-[8px] text-gray-300 tracking-tighter remaining-text">
-                            {{ $capsule->remainingLabel() }}
+                        <img src="{{ asset('img/locked.png') }}" alt="Locked" class="mx-auto w-14 h-14 object-contain mb-2 group-hover:scale-110 transition"> 
+                        <span class="block text-[8px] text-gray-300 tracking-tighter remaining-text"> 
+                            {{ $capsule->remainingLabel() }} 
                         </span>
                     </button>
                 @empty
@@ -28,16 +36,19 @@
 
         {{-- CENTER: Interactive Preview --}}
         <section class="flex-1 flex flex-col items-center justify-center gap-12 px-4">
-            <a id="capsule-link" href="javascript:void(0)" class="block transition-all duration-300 opacity-70">
-                <img 
-                    id="preview-img"
-                    src="{{ asset('img/locked.png') }}" 
-                    alt="Preview" 
-                    class="w-64 h-64 object-contain mx-auto"
-                />
-            </a>
-
-            <div id="preview-box" class="border border-gray-400 px-8 py-6 text-center text-[10px] leading-loose tracking-widest bg-[#1f1f1f] min-w-[300px]">
+            <img 
+                id="preview-img"
+                src="{{ asset('img/locked.png') }}" 
+                alt="Preview" 
+                class="w-64 h-64 object-contain mx-auto opacity-70 transition"
+            />
+            <div 
+                id="preview-box"
+                class="border border-gray-400 px-8 py-6 text-center text-[10px]
+                    leading-loose tracking-widest bg-[#1f1f1f]
+                    min-w-[300px]
+                    transition cursor-not-allowed opacity-60"
+            >
                 <span id="preview-text">PILIH CAPSULE</span>
             </div>
         </section>
@@ -51,12 +62,20 @@
             <div class="grid grid-cols-2 gap-y-8 gap-x-4 text-center">
                 @forelse ($unlockedCapsules as $capsule)
                     <button 
-                        class="group"
-                        onclick="selectCapsule('{{ $capsule->agoLabel() }}', 'unlocked', '{{ route('capsules.show', $capsule) }}', false)"
+                        class="group capsule-btn capsule-unlocked
+                            border border-transparent rounded-md p-2
+                            hover:bg-gray-800 transition"
+                        onclick="selectCapsule(
+                            '{{ $capsule->agoLabel() }}',
+                            'unlocked',
+                            '{{ route('capsules.show', $capsule) }}',
+                            false,
+                            this
+                        )"
                     >
-                        <img src="{{ asset('img/unlocked.png') }}" alt="Unlocked" class="mx-auto w-10 h-10 object-contain mb-2 group-hover:scale-110 transition">
+                        <img src="{{ asset('img/unlocked.png') }}" alt="Unlocked" class="mx-auto w-14 h-14 object-contain mb-2 group-hover:scale-110 transition">
                         <span class="block text-[8px] text-gray-300 tracking-tighter">
-                            {{ $capsule->agoLabel() }}
+                            {{ $capsule->agoLabel() }} 
                         </span>
                     </button>
                 @empty
@@ -68,42 +87,65 @@
     </div>
 
     <script>
-        function selectCapsule(label, type, url, isLocked) {
-            const previewText = document.getElementById('preview-text');
-            const previewImg = document.getElementById('preview-img');
-            const previewLink = document.getElementById('capsule-link');
-            
-            // Set Text & Image
-            if (isLocked) {
-                previewText.innerHTML = label.toUpperCase() + "<br>REMAINING";
-                previewImg.src = "{{ asset('img/locked.png') }}";
-                previewLink.style.opacity = "0.5";
-                previewLink.href = "javascript:void(0)";
-                previewLink.classList.add('cursor-not-allowed');
-            } else {
-                previewText.innerHTML = label.toUpperCase() + " AGO<br><span class='text-green-500'>TAP TO OPEN</span>";
-                previewImg.src = "{{ asset('img/unlocked.png') }}";
-                previewLink.style.opacity = "1";
-                previewLink.href = url;
-                previewLink.classList.remove('cursor-not-allowed');
-            }
+    function selectCapsule(label, type, url, isLocked, el) {
+        const previewText = document.getElementById('preview-text');
+        const previewImg  = document.getElementById('preview-img');
+        const previewBox  = document.getElementById('preview-box');
+
+        // RESET capsule active (sama seperti sebelumnya)
+        document.querySelectorAll('.capsule-btn').forEach(btn => {
+            btn.classList.remove(
+                'border-yellow-400','bg-yellow-900/20',
+                'border-green-400','bg-green-900/20',
+                'capsule-active'
+            );
+            btn.classList.add('border-transparent');
+        });
+
+        // SET ACTIVE
+        if (isLocked) {
+            el.classList.add('border-yellow-400','bg-yellow-900/20','capsule-active');
+        } else {
+            el.classList.add('border-green-400','bg-green-900/20','capsule-active');
         }
 
-        // Logic Timer (Opsional jika ingin countdown jalan terus)
-        function startCountdown() {
-            document.querySelectorAll('.remaining-item').forEach(item => {
-                const unlockAt = parseInt(item.dataset.unlock);
-                const textEl = item.querySelector('.remaining-text');
-                
-                setInterval(() => {
-                    const now = Math.floor(Date.now() / 1000);
-                    const diff = unlockAt - now;
-                    if (diff <= 0) {
-                        textEl.innerText = "READY!";
-                    }
-                }, 1000);
-            });
+        // ===== UPDATE PREVIEW =====
+        if (isLocked) {
+            previewText.innerHTML = label.toUpperCase() + "<br>";
+            previewImg.src = "{{ asset('img/locked.png') }}";
+            previewImg.classList.add('opacity-70');
+
+            previewBox.dataset.href = "";
+            previewBox.classList.add('cursor-not-allowed','opacity-60');
+            previewBox.classList.remove(
+                'cursor-pointer',
+                'hover:bg-green-900/30',
+                'border-green-400'
+            );
+
+        } else {
+            previewText.innerHTML =
+                label.toUpperCase() +
+                "<br><span class='text-green-500'>TAP TO OPEN</span>";
+            previewImg.src = "{{ asset('img/unlocked.png') }}";
+            previewImg.classList.remove('opacity-70');
+
+            previewBox.dataset.href = url;
+            previewBox.classList.remove('cursor-not-allowed','opacity-60');
+            previewBox.classList.add(
+                'cursor-pointer',
+                'hover:bg-green-900/30',
+                'border-green-400'
+            );
         }
-        startCountdown();
+    }
+
+    // CLICK HANDLER PREVIEW BOX
+    document.getElementById('preview-box').addEventListener('click', function () {
+        const url = this.dataset.href;
+        if (url) {
+            window.location.href = url;
+        }
+    });
     </script>
 </x-app-layout>

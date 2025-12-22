@@ -15,6 +15,9 @@
             ::-webkit-scrollbar { width: 8px; }
             ::-webkit-scrollbar-track { background: #1f1f1f; }
             ::-webkit-scrollbar-thumb { background: #4a4646; }
+            .capsule-active {
+                box-shadow: 0 0 12px rgba(255,255,255,0.15);
+            }
         </style>
     </head>
     <body class="min-h-screen bg-[#2b2b2b] text-white antialiased font-['Press_Start_2P']">
@@ -29,6 +32,11 @@
             @endisset
 
             <div class="flex-1 flex flex-col items-center justify-center">
+                <div class="mb-3 text-center">
+                    <p class="text-2xl leading-loose">
+                        Digital Time Capsule
+                    </p>
+                </div>
                 {{ $slot }}
             </div>
         </main>
