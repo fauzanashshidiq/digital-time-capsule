@@ -1,90 +1,196 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Capsules
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto grid grid-cols-3 gap-6">
-
-            {{-- LEFT: Locked --}}
-            <div class="bg-gray-100 p-4 rounded">
-                <h3 class="font-semibold mb-3">Locked</h3>
-
-                @forelse ($lockedCapsules as $capsule)
-                    <button
-                        class="block w-full text-left p-2 hover:bg-gray-200 rounded"
-                        onclick="selectCapsule(
-                            '{{ $capsule->remainingLabel() }}',
-                            '{{ route('capsules.edit', $capsule) }}',
-                            true
-                        )"
-                    >
-                        {{ ucfirst($capsule->remainingLabel()) }}
-                    </button>
-                @empty
-                    <p class="text-sm text-gray-500">No locked capsules</p>
-                @endforelse
-            </div>
-
-            {{-- CENTER: Preview --}}
-            <a
-                id="capsule-preview"
-                href="javascript:void(0)"
-                class="block bg-white p-6 rounded shadow text-center cursor-default"
-            >
-                <h2 id="capsule-title" class="text-xl font-semibold mb-2">
-                    Select a capsule
-                </h2>
-                <p id="capsule-message" class="text-gray-600">
-                    Click a capsule to preview
-                </p>
+    <div class="w-full flex justify-center">
+        <div class="flex flex-col sm:flex-row w-full max-w-6xl h-auto sm:h-[85vh] gap-6 sm:gap-4">
+            {{-- MOBILE CREATE --}}
+            <a href="{{ route('capsules.create') }}"
+            class="sm:hidden flex items-center justify-center
+                    h-10 w-full
+                    border border-gray-500
+                    bg-[#1f1f1f]
+                    hover:text-white hover:bg-gray-800
+                    transition">
+                <img src="{{ asset('img/plus.png') }}" class="w-8 h-8 object-contain"></img>
             </a>
+            {{-- LEFT: Locked Capsules --}}
+            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f]">
+                <p class="text-center text-[10px] my-4 tracking-widest uppercase text-gray-400">
+                    Locked Capsule
+                </p>
 
-            {{-- RIGHT: Unlocked --}}
-            <div class="bg-gray-100 p-4 rounded">
-                <h3 class="font-semibold mb-3">Unlocked</h3>
+                <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+                    <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
 
-                @forelse ($unlockedCapsules as $capsule)
-                    <button
-                        class="block w-full text-left p-2 hover:bg-gray-200 rounded opacity-60 cursor-not-allowed"
-                        onclick="selectCapsule(
-                            '{{ $capsule->agoLabel() }}',
-                            null,
-                            false
-                        )"
+                        @foreach ($lockedCapsules as $capsule)
+                            <div
+                                draggable="true"
+                                data-edit-url="{{ route('capsules.edit', $capsule) }}"
+                                onclick="selectForEdit(this)"
+                                class="capsule-edit
+                                    border border-transparent rounded-md p-2
+                                    hover:bg-gray-800 transition
+                                    cursor-grab shrink-0 w-24 sm:w-auto"
+                                ondragstart="onDragStart(event)"
+                            >
+                                <div class="relative inline-block">
+                                    {{-- Locked --}}
+                                    <img
+                                        src="{{ asset('img/locked.png') }}"
+                                        class="mx-auto w-12 sm:w-14 h-12 sm:h-14"
+                                    >
+
+                                    {{-- Pencil overlay --}}
+                                    <img
+                                        src="{{ asset('img/pencil.png') }}"
+                                        class="
+                                            absolute -top-2 -right-1 w-8 h-8 object-contain
+                                        "
+                                    >
+                                </div>
+
+                                <span class="block text-[8px] text-gray-300 mt-2">
+                                    {{ $capsule->remainingLabel() }}
+                                </span>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
+            </section>
+
+            {{-- CENTER: EDIT PREVIEW --}}
+            <section class="flex-1 flex flex-col items-center justify-center gap-12 px-4">
+
+                <div class="relative">
+
+                    {{-- LEFT ICON : BACK TO DASHBOARD (MOBILE ONLY) --}}
+                    <a
+                        href="{{ route('dashboard') }}"
+                        class="
+                            absolute -left-10 top-3 -translate-y-1/2
+                            text-gray-400 hover:text-white transition
+                            sm:hidden border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800
+                        "
                     >
-                        {{ ucfirst($capsule->agoLabel()) }}
-                    </button>
-                @empty
-                    <p class="text-sm text-gray-500">No unlocked capsules</p>
-                @endforelse
-            </div>
+                        <img
+                            src="{{ asset('img/home.png') }}"
+                            class="w-8 h-8 object-contain"
+                        >
+                    </a>
+
+                    {{-- IMAGE --}}
+                    <div class="flex flex-col items-center gap-3 px-7">
+                        <img
+                            src="{{ asset('img/pencil.png') }}"
+                            class="
+                                w-40 h-40
+                                sm:w-64 sm:h-64
+                                object-contain
+                                opacity-80
+                            "
+                        />
+                    </div>
+
+                    {{-- RIGHT ICON : DELETE MODE (MOBILE ONLY) --}}
+                    <a
+                        href="{{ route('capsules.delete-mode') }}"
+                        class="
+                            absolute -right-10 top-3 -translate-y-1/2
+                            text-red-500 hover:text-red-400 transition
+                            sm:hidden border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800
+                        "
+                    >
+                        <img
+                            src="{{ asset('img/trash.png') }}"
+                            class="w-8 h-8 object-contain"
+                        >
+                    </a>
+
+                </div>
+
+                {{-- TAP BOX --}}
+                <div
+                    id="edit-dropzone"
+                    onclick="tapToEdit()"
+                    ondragover="onDragOver(event)"
+                    ondrop="onDrop(event)"
+                    class="
+                        border border-gray-400
+                        px-10 py-8
+                        text-center text-[10px]
+                        leading-loose tracking-widest
+                        bg-[#1f1f1f]
+                        min-w-[300px]
+                        transition
+                        cursor-pointer
+                        active:scale-95
+                    "
+                >
+                    Tap atau drag capsule<br>untuk Edit Capsule
+                </div>
+
+            </section>
+
+            {{-- RIGHT: Unlocked Capsules --}}
+            <section class="border border-gray-500 p-4 sm:p-6 w-full sm:w-72 bg-[#1f1f1f] opacity-60">
+                <p class="text-center text-[10px] mb-4 tracking-widest uppercase text-gray-400">
+                    Unlocked Capsule
+                </p>
+
+                <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
+                    <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
+                        @foreach ($unlockedCapsules as $capsule)
+                            <div class="rounded-md p-2 cursor-not-allowed">
+                                <img
+                                    src="{{ asset('img/unlocked.png') }}"
+                                    class="mx-auto w-12 sm:w-14 h-12 sm:h-14 mb-2"
+                                >
+                                <span class="block text-[8px] text-gray-300">
+                                    {{ $capsule->agoLabel() }}
+                                </span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </section>
 
         </div>
     </div>
 
+    {{-- Drag Script --}}
     <script>
-        function selectCapsule(label, url = null, editable = false) {
-            const preview = document.getElementById('capsule-preview');
-            const title = document.getElementById('capsule-title');
-            const message = document.getElementById('capsule-message');
+        let selectedEditUrl = null;
 
-            title.innerText = label;
+        function selectForEdit(el) {
+            // clear active
+            document.querySelectorAll('.capsule-edit').forEach(c => {
+                c.classList.remove('border-yellow-400','bg-yellow-900/20');
+            });
 
-            if (editable) {
-                message.innerText = 'Tap to edit this capsule';
+            // set active
+            el.classList.add('border-yellow-400','bg-yellow-900/20');
+            selectedEditUrl = el.dataset.editUrl;
+        }
 
-                preview.href = url;
-                preview.classList.remove('cursor-not-allowed');
-                preview.classList.add('cursor-pointer', 'hover:bg-gray-50');
-            } else {
-                message.innerText = 'This capsule can no longer be edited';
+        function tapToEdit() {
+            if (selectedEditUrl) {
+                window.location.href = selectedEditUrl;
+            }
+        }
 
-                preview.href = 'javascript:void(0)';
-                preview.classList.remove('cursor-pointer', 'hover:bg-gray-50');
-                preview.classList.add('cursor-not-allowed');
+        function onDragStart(e) {
+            e.dataTransfer.setData('edit-url', e.currentTarget.dataset.editUrl);
+        }
+
+        function onDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('border-yellow-400');
+        }
+
+        function onDrop(e) {
+            e.preventDefault();
+            const url = e.dataTransfer.getData('edit-url');
+            if (url) {
+                window.location.href = url;
             }
         }
     </script>

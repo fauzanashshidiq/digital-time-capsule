@@ -50,15 +50,15 @@
                 {{-- EDIT --}}
                 <a href="{{ route('capsules.edit-mode') }}"
                    id="preview-edit"
-                   class="absolute -left-10 top-1/2 -translate-y-1/2
+                   class="absolute -left-10 top-3 -translate-y-1/2
                           text-gray-400 hover:text-white transition
                           opacity-100 pointer-events-auto
-                          sm:opacity-0 sm:pointer-events-none">
+                          sm:opacity-0 sm:pointer-events-none border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800">
                     <img src="{{ asset('img/pencil.png') }}" class="w-8 h-8 object-contain"></img>
                 </a>
 
                 {{-- IMAGE --}}
-                <div class="flex flex-col items-center gap-3">
+                <div class="flex flex-col items-center gap-3 px-7">
                     <img
                         id="preview-img"
                         src="{{ asset('img/locked.png') }}"
@@ -87,10 +87,10 @@
                 {{-- DELETE --}}
                 <a href="{{ route('capsules.delete-mode') }}"
                    id="preview-delete"
-                   class="absolute -right-10 top-1/2 -translate-y-1/2
+                   class="absolute -right-10 top-3 -translate-y-1/2
                           text-red-600 hover:text-red-500 transition
                           opacity-100 pointer-events-auto
-                          sm:opacity-0 sm:pointer-events-none">
+                          sm:opacity-0 sm:pointer-events-none border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800">
                     <img src="{{ asset('img/trash.png') }}" class="w-8 h-8 object-contain"></img>
                 </a>
             </div>
