@@ -33,7 +33,7 @@
 
             <div class="flex-1 flex flex-col items-center justify-center">
                 <div class="mb-3 text-center">
-                    <p class="text-2xl leading-loose">
+                    <p class="text-sm sm:text-2xl leading-loose mb-2">
                         Digital Time Capsule
                     </p>
                 </div>
