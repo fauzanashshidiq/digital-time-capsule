@@ -1,53 +1,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
-<aside class="w-72 bg-[#1f1f1f] border-r border-gray-600 p-6 flex flex-col justify-between min-h-screen font-['Press_Start_2P'] text-white">
+<aside class="hidden sm:flex w-72 bg-[#1f1f1f] border-r border-gray-600 p-6 flex-col justify-between min-h-screen font-['Press_Start_2P'] text-white shrink-0">
     <div>
-        <div class="mb-10 pt-4">
-            <p class="text-[10px] leading-loose text-gray-300">
+        <div class="mb-10 pt-4 text-center">
+            <p class="text-sm leading-loose">
                 Hai {{ Auth::user()->name }},<br />
-                Selamat<br />
-                Menjelajahi<br />
-                Waktu
+                Selamat Menjelajahi Waktu
             </p>
         </div>
 
         <a href="{{ route('dashboard') }}" 
-           class="block w-full mb-8 border {{ request()->routeIs('dashboard') ? 'border-white bg-gray-700' : 'border-gray-400' }} py-3 text-center text-[10px] hover:bg-gray-800 transition">
+           class="block w-full mb-8 border {{ request()->routeIs('dashboard') ? 'border-white bg-gray-700' : 'border-gray-400' }} py-4 text-center text-[10px] hover:bg-gray-800 transition">
             DASHBOARD
         </a>
 
         <div class="space-y-6">
-            <p class="text-[10px] text-gray-500 uppercase tracking-widest">Tools</p>
+            <div class="pt-4 text-center">
+                <p class="text-sm leading-loose uppercase">Tools</p>
+            </div>
 
             <a href="{{ route('capsules.create') }}" 
-               class="w-full border border-gray-400 py-3 flex items-center justify-center gap-2 text-[10px] hover:bg-gray-800 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
-                BUAT CAPSULE
+            class="w-full py-3 flex flex-col items-center justify-center gap-3 text-[10px] transition border {{ request()->routeIs('capsules.create') ? 'border-white bg-gray-700 text-white' : 'border-transparent text-gray-400 hover:bg-gray-800' }}">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                <span>BUAT CAPSULE</span>
             </a>
 
             <a href="{{ route('capsules.edit-mode') }}" 
-               class="w-full flex items-center justify-center gap-2 text-gray-400 text-[10px] hover:text-white transition">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                EDIT CAPSULE
+            class="w-full py-3 flex flex-col items-center justify-center gap-3 text-[10px] transition border {{ request()->routeIs('capsules.edit-mode') ? 'border-white bg-gray-700 text-white' : 'border-transparent text-gray-400 hover:bg-gray-800' }}">
+                <i data-lucide="pencil" class="w-5 h-5"></i>
+                <span>EDIT CAPSULE</span>
             </a>
 
             <a href="{{ route('capsules.delete-mode') }}" 
-               class="w-full flex items-center justify-center gap-2 text-red-500 text-[10px] hover:text-red-400 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                HAPUS CAPSULE
+            class="w-full py-3 flex flex-col items-center justify-center gap-3 text-[10px] transition border {{ request()->routeIs('capsules.delete-mode') ? 'border-red-500 bg-red-900/20 text-red-500' : 'border-transparent text-red-500 hover:bg-gray-800' }}">
+                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                <span>HAPUS CAPSULE</span>
             </a>
         </div>
     </div>
 
-    <div class="border-t border-gray-700 pt-6 space-y-4">
-        <a href="{{ route('profile.edit') }}" class="block text-[10px] text-gray-400 hover:text-white">
+    <div class="sticky bottom-0 bg-[#1f1f1f] border-t border-gray-700 p-6 space-y-4">
+        <a href="{{ route('profile.edit') }}" 
+            class="block text-[10px] text-gray-400 hover:text-white">
             PROFILE
         </a>
-        
+
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="w-full text-left text-[10px] text-red-700 hover:text-red-500 uppercase">
-                LOG OUT _
+            <button type="submit"
+                    class="w-full text-left text-[10px] text-red-700 hover:text-red-500 uppercase">
+                LOG OUT
             </button>
         </form>
     </div>

@@ -12,32 +12,31 @@
 
         <style>
             body { font-family: 'Press Start 2P', cursive; }
-            /* Memperkecil scrollbar agar cocok dengan tema retro */
             ::-webkit-scrollbar { width: 8px; }
             ::-webkit-scrollbar-track { background: #1f1f1f; }
             ::-webkit-scrollbar-thumb { background: #4a4646; }
         </style>
     </head>
-    <body class="min-h-screen bg-[#2b2b2b] text-white antialiased">
-        <div class="flex min-h-screen">
-            @include('layouts.navigation')
+    <body class="min-h-screen bg-[#2b2b2b] text-white antialiased font-['Press_Start_2P']">
+    <div class="flex min-h-screen">
+        @include('layouts.navigation')
 
-            <main class="flex-1 p-10 flex flex-col">
-                @isset($header)
-                    <div class="mb-8">
-                        {{ $header }}
-                    </div>
-                @endisset
-
-                <div class="flex-1 flex items-center justify-center">
-                    {{ $slot }}
+        <main class="flex-1 w-full flex flex-col overflow-x-hidden px-4 py-8 sm:p-10">
+            @isset($header)
+                <div class="mb-8">
+                    {{ $header }}
                 </div>
-            </main>
-        </div>
+            @endisset
 
-        <script src="https://unpkg.com/lucide@latest"></script>
-        <script>
-            lucide.createIcons();
-        </script>
-    </body>
+            <div class="flex-1 flex flex-col items-center justify-center">
+                {{ $slot }}
+            </div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
 </html>
