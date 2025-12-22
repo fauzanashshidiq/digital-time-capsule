@@ -19,7 +19,7 @@
 
                 <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
                     <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
-                        @foreach ($lockedCapsules as $capsule)
+                        @forelse ($lockedCapsules as $capsule)
                         <div
                             draggable="true"
                             data-url="{{ route('capsules.destroy',$capsule) }}"
@@ -44,7 +44,11 @@
                                 {{ $capsule->remainingLabel() }}
                             </span>
                         </div>
-                        @endforeach
+                        @empty
+                            <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
+                                <p class="text-[10px] tracking-widest uppercase">NO LOCKED CAPSULES</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </section>
@@ -111,7 +115,7 @@
 
                 <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
                     <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
-                        @foreach ($unlockedCapsules as $capsule)
+                        @forelse ($unlockedCapsules as $capsule)
                         <div
                             draggable="true"
                             data-url="{{ route('capsules.destroy',$capsule) }}"
@@ -136,7 +140,11 @@
                                 {{ $capsule->agoLabel() }}
                             </span>
                         </div>
-                        @endforeach
+                        @empty
+                            <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
+                                <p class="text-[10px] tracking-widest uppercase">NO UNLOCKED CAPSULES</p>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </section>
