@@ -1,145 +1,109 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard
-        </h2>
-    </x-slot>
+    <div class="flex w-full max-w-6xl h-[85vh] items-stretch gap-4">
+        
+        {{-- LEFT: Locked Capsules --}}
+        <section class="border border-gray-500 p-6 w-72 h-full flex flex-col bg-[#1f1f1f]">
+            <p class="text-center text-[10px] mb-8 tracking-widest uppercase text-gray-400">
+                Locked Capsule
+            </p>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto grid grid-cols-3 gap-6">
-
-            {{-- LEFT: Locked --}}
-            <div class="bg-gray-100 p-4 rounded">
-                <h3 class="font-semibold mb-3">Locked</h3>
-
+            <div class="grid grid-cols-2 gap-y-8 gap-x-4 text-center">
                 @forelse ($lockedCapsules as $capsule)
-                    <button
-                        class="block w-full text-left p-2 hover:bg-gray-200 rounded remaining-item"
-                        data-unlock="{{ $capsule->unlock_date->startOfDay()->timestamp }}"
-                        onclick="selectCapsule(
-                            this.dataset.label,
-                            'locked'
-                        )"
-                        data-label="{{ ucfirst($capsule->remainingLabel()) }}"
+                    <button 
+                        class="remaining-item group"
+                        data-unlock="{{ $capsule->unlock_date->timestamp }}"
+                        data-label="{{ $capsule->remainingLabel() }}"
+                        onclick="selectCapsule('{{ $capsule->remainingLabel() }}', 'locked', null, true)"
                     >
-                        <span class="remaining-text">
-                            {{ ucfirst($capsule->remainingLabel()) }}
+                        <img src="{{ asset('img/locked.png') }}" alt="Locked" class="mx-auto w-10 h-10 object-contain mb-2 group-hover:scale-110 transition">
+                        <span class="block text-[8px] text-gray-300 tracking-tighter remaining-text">
+                            {{ $capsule->remainingLabel() }}
                         </span>
                     </button>
                 @empty
-                    <p class="text-sm text-gray-500">No locked capsules</p>
+                    <p class="col-span-2 text-[8px] text-gray-600">Kosong...</p>
                 @endforelse
             </div>
+        </section>
 
-            {{-- CENTER: Preview --}}
-            <a
-                id="capsule-preview"
-                href="javascript:void(0)"
-                class="block bg-white p-6 rounded shadow text-center cursor-default"
-            >
-                <h2 id="capsule-title" class="text-xl font-semibold mb-2">
-                    Select a capsule
-                </h2>
-                <p id="capsule-message" class="text-gray-600">
-                    Click a capsule to preview
-                </p>
+        {{-- CENTER: Interactive Preview --}}
+        <section class="flex-1 flex flex-col items-center justify-center gap-12 px-4">
+            <a id="capsule-link" href="javascript:void(0)" class="block transition-all duration-300 opacity-70">
+                <img 
+                    id="preview-img"
+                    src="{{ asset('img/locked.png') }}" 
+                    alt="Preview" 
+                    class="w-64 h-64 object-contain mx-auto"
+                />
             </a>
 
-            {{-- RIGHT: Unlocked --}}
-            <div class="bg-gray-100 p-4 rounded">
-                <h3 class="font-semibold mb-3">Unlocked</h3>
+            <div id="preview-box" class="border border-gray-400 px-8 py-6 text-center text-[10px] leading-loose tracking-widest bg-[#1f1f1f] min-w-[300px]">
+                <span id="preview-text">PILIH CAPSULE</span>
+            </div>
+        </section>
 
+        {{-- RIGHT: Unlocked Capsules --}}
+        <section class="border border-gray-500 p-6 w-72 h-full flex flex-col bg-[#1f1f1f]">
+            <p class="text-center text-[10px] mb-8 tracking-widest uppercase text-gray-400">
+                Unlocked Capsule
+            </p>
+
+            <div class="grid grid-cols-2 gap-y-8 gap-x-4 text-center">
                 @forelse ($unlockedCapsules as $capsule)
-                    <button
-                        class="block w-full text-left p-2 hover:bg-gray-200 rounded"
-                        onclick="selectCapsule(
-                            '{{ ucfirst($capsule->agoLabel()) }}',
-                            'unlocked',
-                            '{{ route('capsules.show', $capsule) }}'
-                        )"
+                    <button 
+                        class="group"
+                        onclick="selectCapsule('{{ $capsule->agoLabel() }}', 'unlocked', '{{ route('capsules.show', $capsule) }}', false)"
                     >
-                        {{ ucfirst($capsule->agoLabel()) }}
+                        <img src="{{ asset('img/unlocked.png') }}" alt="Unlocked" class="mx-auto w-10 h-10 object-contain mb-2 group-hover:scale-110 transition">
+                        <span class="block text-[8px] text-gray-300 tracking-tighter">
+                            {{ $capsule->agoLabel() }}
+                        </span>
                     </button>
                 @empty
-                    <p class="text-sm text-gray-500">No unlocked capsules</p>
+                    <p class="col-span-2 text-[8px] text-gray-600">Kosong...</p>
                 @endforelse
             </div>
+        </section>
 
-        </div>
     </div>
+
     <script>
-        function selectCapsule(label, type, url = null) {
-            const preview = document.getElementById('capsule-preview');
-            const title = document.getElementById('capsule-title');
-            const message = document.getElementById('capsule-message');
-
-            title.innerText = label;
-
-            if (type === 'locked') {
-                message.innerText = 'This capsule is still locked';
-
-                preview.href = 'javascript:void(0)';
-                preview.classList.remove('cursor-pointer', 'hover:bg-gray-50');
-                preview.classList.add('cursor-not-allowed');
-
+        function selectCapsule(label, type, url, isLocked) {
+            const previewText = document.getElementById('preview-text');
+            const previewImg = document.getElementById('preview-img');
+            const previewLink = document.getElementById('capsule-link');
+            
+            // Set Text & Image
+            if (isLocked) {
+                previewText.innerHTML = label.toUpperCase() + "<br>REMAINING";
+                previewImg.src = "{{ asset('img/locked.png') }}";
+                previewLink.style.opacity = "0.5";
+                previewLink.href = "javascript:void(0)";
+                previewLink.classList.add('cursor-not-allowed');
             } else {
-                message.innerText = 'Tap the capsule to see the letter';
-
-                preview.href = url;
-                preview.classList.remove('cursor-not-allowed');
-                preview.classList.add('cursor-pointer', 'hover:bg-gray-50');
+                previewText.innerHTML = label.toUpperCase() + " AGO<br><span class='text-green-500'>TAP TO OPEN</span>";
+                previewImg.src = "{{ asset('img/unlocked.png') }}";
+                previewLink.style.opacity = "1";
+                previewLink.href = url;
+                previewLink.classList.remove('cursor-not-allowed');
             }
         }
-    </script>
-    <script>
-    function formatRemaining(seconds) {
-        if (seconds <= 0) return 'Unlocked';
 
-        const units = [
-            { label: 'year', value: 31536000 },
-            { label: 'month', value: 2592000 },
-            { label: 'week', value: 604800 },
-            { label: 'day', value: 86400 },
-            { label: 'hour', value: 3600 },
-            { label: 'minute', value: 60 },
-            { label: 'second', value: 1 },
-        ];
-
-        let parts = [];
-
-        for (const unit of units) {
-            const amount = Math.floor(seconds / unit.value);
-            if (amount > 0) {
-                parts.push(`${amount} ${unit.label}${amount > 1 ? 's' : ''}`);
-                seconds -= amount * unit.value;
-            }
-            if (parts.length === 2) break;
+        // Logic Timer (Opsional jika ingin countdown jalan terus)
+        function startCountdown() {
+            document.querySelectorAll('.remaining-item').forEach(item => {
+                const unlockAt = parseInt(item.dataset.unlock);
+                const textEl = item.querySelector('.remaining-text');
+                
+                setInterval(() => {
+                    const now = Math.floor(Date.now() / 1000);
+                    const diff = unlockAt - now;
+                    if (diff <= 0) {
+                        textEl.innerText = "READY!";
+                    }
+                }, 1000);
+            });
         }
-
-        return parts.join(' and ') + ' remaining';
-    }
-
-    function startRemainingCountdown() {
-        document.querySelectorAll('.remaining-item').forEach(button => {
-            const unlockTimestamp = parseInt(button.dataset.unlock);
-            const text = button.querySelector('.remaining-text');
-
-            setInterval(() => {
-                const now = Math.floor(Date.now() / 1000);
-                const diff = unlockTimestamp - now;
-
-                const label = formatRemaining(diff);
-                text.innerText = label;
-
-                // update preview label kalau sedang dipilih
-                if (document.getElementById('capsule-title').innerText === button.dataset.label) {
-                    document.getElementById('capsule-title').innerText = label;
-                }
-
-            }, 1000);
-        });
-    }
-
-    startRemainingCountdown();
+        startCountdown();
     </script>
 </x-app-layout>
