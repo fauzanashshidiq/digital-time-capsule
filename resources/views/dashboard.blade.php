@@ -20,26 +20,21 @@
 
             <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
                 <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
-                    @foreach ($lockedCapsules as $capsule)
+                    @forelse ($lockedCapsules as $capsule)
                         <button
-                            class="capsule-btn capsule-locked
-                                   border border-transparent rounded-md p-2
-                                   hover:bg-gray-800 transition shrink-0 w-24 sm:w-auto"
-                            onclick="selectCapsule(
-                                '{{ $capsule->remainingLabel() }}',
-                                'locked',
-                                null,
-                                true,
-                                this
-                            )"
+                            class="capsule-btn capsule-locked border border-transparent rounded-md p-2 hover:bg-gray-800 transition shrink-0 w-24 sm:w-auto"
+                            onclick="selectCapsule('{{ $capsule->remainingLabel() }}', 'locked', null, true, this)"
                         >
-                            <img src="{{ asset('img/locked.png') }}"
-                                 class="mx-auto w-12 sm:w-14 h-12 sm:h-14 mb-2">
+                            <img src="{{ asset('img/locked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14 mb-2">
                             <span class="block text-[8px] text-gray-300">
                                 {{ $capsule->remainingLabel() }}
                             </span>
                         </button>
-                    @endforeach
+                    @empty
+                        <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
+                            <p class="text-[10px] tracking-widest uppercase">NO LOCKED CAPSULES</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>
@@ -114,26 +109,21 @@
 
             <div class="sm:flex-1 sm:overflow-y-auto overflow-x-auto">
                 <div class="flex sm:grid sm:grid-cols-2 gap-4 sm:gap-y-8 sm:gap-x-4 min-w-max sm:min-w-0 text-center">
-                    @foreach ($unlockedCapsules as $capsule)
+                    @forelse ($unlockedCapsules as $capsule)
                         <button
-                            class="capsule-btn capsule-unlocked
-                                   border border-transparent rounded-md p-2
-                                   hover:bg-gray-800 transition shrink-0 w-24 sm:w-auto"
-                            onclick="selectCapsule(
-                                '{{ $capsule->agoLabel() }}',
-                                'unlocked',
-                                '{{ route('capsules.show', $capsule) }}',
-                                false,
-                                this
-                            )"
+                            class="capsule-btn capsule-unlocked border border-transparent rounded-md p-2 hover:bg-gray-800 transition shrink-0 w-24 sm:w-auto"
+                            onclick="selectCapsule('{{ $capsule->agoLabel() }}', 'unlocked', '{{ route('capsules.show', $capsule) }}', false, this)"
                         >
-                            <img src="{{ asset('img/unlocked.png') }}"
-                                 class="mx-auto w-12 sm:w-14 h-12 sm:h-14 mb-2">
+                            <img src="{{ asset('img/unlocked.png') }}" class="mx-auto w-12 sm:w-14 h-12 sm:h-14 mb-2">
                             <span class="block text-[8px] text-gray-300">
                                 {{ $capsule->agoLabel() }}
                             </span>
                         </button>
-                    @endforeach
+                    @empty
+                        <div class="col-span-2 flex flex-col items-center justify-center py-10 opacity-30 w-full border border-transparent border-gray-600 rounded-lg">
+                            <p class="text-[10px] tracking-widest uppercase">NO UNLOCKED CAPSULES</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </section>

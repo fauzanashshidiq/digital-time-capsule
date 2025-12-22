@@ -11,6 +11,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
         <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+        <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
         <style>
             body { font-family: 'Press Start 2P', cursive; }
@@ -39,6 +40,51 @@
         @include('layouts.navigation')
 
         <main class="flex-1 w-full flex flex-col overflow-x-hidden px-4 py-8 sm:p-10">
+            <!-- MOBILE TOP BAR -->
+            <div class="flex sm:hidden justify-between items-center mb-4">
+    <a
+        href="{{ route('dashboard') }}"
+        class="border border-gray-500 px-3 py-2 bg-[#1f1f1f] text-xs hover:bg-gray-800"
+    >
+        DASHBOARD
+    </a>
+
+    <div class="relative" x-data="{ open: false }">
+        <button
+            @click="open = !open"
+            class="border border-gray-500 px-3 py-2 bg-[#1f1f1f] text-xs flex items-center gap-1"
+        >
+            {{ auth()->user()->name }}
+            <span :class="open ? 'rotate-180' : ''" class="transition-transform">▼</span>
+        </button>
+
+        <div
+            x-show="open"
+            @click.outside="open = false"
+            x-transition
+            class="absolute right-0 mt-2 w-40 bg-[#1f1f1f] border border-gray-500 text-xs z-50"
+            style="display: none;"
+        >
+            <a
+                href="{{ route('profile.edit') }}"
+                class="block px-4 py-2 hover:bg-gray-800"
+            >
+                PROFILE
+            </a>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button
+                    type="submit"
+                    class="w-full text-left px-4 py-2 text-red-400 hover:bg-gray-800"
+                >
+                    LOGOUT
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
             @isset($header)
                 <div class="mb-8">
                     {{ $header }}

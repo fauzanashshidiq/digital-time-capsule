@@ -60,19 +60,14 @@
             {{-- CENTER: EDIT PREVIEW --}}
             <section class="flex-1 flex flex-col items-center justify-center gap-12 px-4">
                 <div class="relative">
-                    {{-- LEFT ICON : BACK TO DASHBOARD (MOBILE ONLY) --}}
-                    <a
-                        href="{{ route('dashboard') }}"
-                        class="
-                            absolute -left-10 top-3 -translate-y-1/2
+                    {{-- EDIT --}}
+                    <a href="{{ route('capsules.edit-mode') }}"
+                    id="preview-edit"
+                    class="absolute -left-10 top-3 -translate-y-1/2
                             text-gray-400 hover:text-white transition
-                            sm:hidden border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800
-                        "
-                    >
-                        <img
-                            src="{{ asset('img/home.png') }}"
-                            class="w-8 h-8 object-contain"
-                        >
+                            opacity-100 pointer-events-auto
+                            sm:opacity-0 sm:pointer-events-none border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800">
+                        <img src="{{ asset('img/pencil.png') }}" class="w-8 h-8 object-contain"></img>
                     </a>
 
                     {{-- IMAGE --}}
@@ -88,19 +83,14 @@
                         />
                     </div>
 
-                    {{-- RIGHT ICON : DELETE MODE (MOBILE ONLY) --}}
-                    <a
-                        href="{{ route('capsules.delete-mode') }}"
-                        class="
-                            absolute -right-10 top-3 -translate-y-1/2
-                            text-red-500 hover:text-red-400 transition
-                            sm:hidden border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800
-                        "
-                    >
-                        <img
-                            src="{{ asset('img/trash.png') }}"
-                            class="w-8 h-8 object-contain"
-                        >
+                    {{-- DELETE --}}
+                    <a href="{{ route('capsules.delete-mode') }}"
+                    id="preview-delete"
+                    class="absolute -right-10 top-3 -translate-y-1/2
+                            text-red-600 hover:text-red-500 transition
+                            opacity-100 pointer-events-auto
+                            sm:opacity-0 sm:pointer-events-none border border-gray-500 p-1 bg-[#1f1f1f] hover:bg-gray-800">
+                        <img src="{{ asset('img/trash.png') }}" class="w-8 h-8 object-contain"></img>
                     </a>
                 </div>
 
