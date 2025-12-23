@@ -38,7 +38,7 @@
                     >
                         @forelse ($capsule->images as $image)
                             <img
-                                src="{{ asset('storage/' . $image->image_path) }}"
+                                src="{{ $image->image_path }}"
                                 class="
                                     border border-gray-300
                                     object-cover

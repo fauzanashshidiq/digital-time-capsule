@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class CapsuleController extends Controller
 {
@@ -59,12 +60,24 @@ class CapsuleController extends Controller
         // upload images
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('capsules', 'public');
-
-                CapsuleImage::create([
-                    'capsule_id' => $capsule->id,
-                    'image_path' => $path,
+                // Upload ke API Cloudinary
+                $response = Http::attach(
+                    'file', 
+                    file_get_contents($image), 
+                    $image->getClientOriginalName()
+                )->post("https://api.cloudinary.com/v1_1/" . env('CLOUDINARY_CLOUD_NAME') . "/image/upload", [
+                    'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
+                    'folder' => 'capsules',
                 ]);
+
+                if ($response->successful()) {
+                    $url = $response->json()['secure_url'];
+
+                    CapsuleImage::create([
+                        'capsule_id' => $capsule->id,
+                        'image_path' => $url,
+                    ]);
+                }
             }
         }
 
