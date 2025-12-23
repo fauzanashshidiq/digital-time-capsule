@@ -4,11 +4,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Digital Time Capsule</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+    
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#4F46E5">
+    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
 </head>
 
 <body
@@ -38,6 +42,14 @@
         @endif
 
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW registered:', reg))
+                .catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
-
 </html>

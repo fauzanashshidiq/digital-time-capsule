@@ -14,6 +14,10 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
 
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#4F46E5">
+    <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
+
     <script>
         // Konfigurasi tambahan agar variabel warna cyan-300 terbaca oleh CDN
         tailwind.config = {
@@ -34,6 +38,14 @@
     <div class="min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364]">
         {{ $slot }}
     </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('SW registered:', reg))
+                .catch(err => console.log('SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
-
 </html>

@@ -28,7 +28,7 @@ class CapsuleController extends Controller
             ->latest()
             ->get();
 
-        return view('capsules.index', compact('capsules'));
+        return view('dashboard', compact('capsules'));
     }
 
     /**
