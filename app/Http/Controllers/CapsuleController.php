@@ -81,7 +81,7 @@ class CapsuleController extends Controller
             }
         }
 
-        return redirect()->route('capsules.create')
+        return redirect()->route('dashboard')
             ->with('success', 'Capsule berhasil dibuat');
     }
 
@@ -140,7 +140,7 @@ class CapsuleController extends Controller
         }
     }
 
-        return redirect()->route('capsules.edit-mode')
+        return redirect()->route('dashboard')
             ->with('success', 'Capsule berhasil diupdate');
     }
 
