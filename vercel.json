@@ -9,6 +9,7 @@
         { "src": "/sw.js", "dest": "/public/sw.js" },
         { "src": "/manifest.json", "dest": "/public/manifest.json" },
         { "src": "/img/(.*)", "dest": "/public/img/$1" },
+        { "src": "/favicon.ico", "dest": "/favicon.ico" },
         { "src": "/offline.html", "dest": "/public/offline.html" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
@@ -18,7 +19,9 @@
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_URL": "https://yourproductionurl.com",
+        "APP_URL": "https://digital-time-capsule-pied.vercel.app",
+        "ASSET_URL": "https://digital-time-capsule-pied.vercel.app",
+        "FORCE_HTTPS": "true",
         "APP_KEY": "base64:UKK0eEd2/Gicg+X9nMdgKvNiP4fnGt3XvOysnWpFTF0=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
