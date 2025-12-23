@@ -13,8 +13,9 @@
         <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
         
-        <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-<link rel="manifest" href="{{ asset('manifest.json') }}">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        <link rel="icon" href="{{ asset('favicon.ico') }}?v=1" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=1" type="image/x-icon">
         <meta name="theme-color" content="#4F46E5">
         <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
 

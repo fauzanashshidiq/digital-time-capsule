@@ -10,8 +10,9 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
     
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="icon" href="{{ asset('favicon.ico') }}?v=1" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=1" type="image/x-icon">
     <meta name="theme-color" content="#4F46E5">
     <link rel="apple-touch-icon" href="{{ asset('icons/icon-192.png') }}">
 </head>

@@ -10,6 +10,7 @@
         { "src": "/manifest.json", "dest": "/public/manifest.json" },
         { "src": "/img/(.*)", "dest": "/public/img/$1" },
         { "src": "/favicon.ico", "dest": "/favicon.ico" },
+        { "src": "/icons/(.*)", "dest": "/icons/$1" },
         { "src": "/offline.html", "dest": "/public/offline.html" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
